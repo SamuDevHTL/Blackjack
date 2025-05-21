@@ -2,27 +2,21 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Login</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
+    <title>Register</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='register.css') }}">
 </head>
 <body>
     <div class="login-container">
-        <h2>Login</h2>
+        <h2>Register</h2>
         <form method="POST">
             <input type="text" name="username" placeholder="Username" required><br>
             <input type="password" name="password" placeholder="Password" required><br>
-            <button type="submit">Login</button>
+            <button type="submit">Register</button>
         </form>
-
         {% if message %}
         <p style="color: red;">{{ message }}</p>
         {% endif %}
-
-        <p>Don't have an account?</p>
-        <a href="{{ url_for('register') }}">
-            <button type="button">Register</button>
-        </a>
+        <p>Already have an account? <a href="{{ url_for('login') }}">Login</a></p>
     </div>
 </body>
 </html>
-
