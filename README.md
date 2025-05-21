@@ -57,9 +57,9 @@ users (
 ### Planned Features
 - [ ] Face ID integration
 - [ ] Configurable bets
-- [ ] Additional games
 - [ ] User statistics/achievements
 - [ ] Security improvements
+- [ ] Improve looks
 
 ## API Routes
 
@@ -78,31 +78,8 @@ users (
 
 ## Security Notes
 
-1. This is a demonstration project. In production:
-   - Use secure password hashing
-   - Implement CSRF protection
-   - Use HTTPS
-   - Store sensitive credentials in environment variables
-
-2. Current limitations:
+Current limitations:
    - Plain text password storage (not recommended for production)
    - Basic session management
    - No rate limiting
 
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Commit your changes
-4. Push to the branch
-5. Create a Pull Request
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## Acknowledgments
-
-- Flask framework
-- MySQL database
-- Bootstrap for styling (if used)
