@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blackjack Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        .game-area {
+            background-color: #2c7a2c;
+            padding: 20px;
+            border-radius: 10px;
+            color: white;
+            margin-bottom: 20px;
+        }
+        .hand {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+        }
+        .card {
+            display: inline-block;
+            background-color: white;
+            color: black;
+            padding: 10px;
+            margin: 5px;
+            border-radius: 5px;
+            min-width: 30px;
+            text-align: center;
+        }
+        .card.red {
+            color: red;
+        }
+        .card.hidden {
+            background-color: #2b5aa7;
+            color: white;
+        }
+        .controls {
+            margin-top: 20px;
+        }
+        .button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        .message {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin: 20px 0;
+            padding: 10px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+        }
+        .money {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #4CAF50;
+        }
+    </style>
+</head>
+<body>
+    <h1>Blackjack</h1>
+    
+    <div class="money">Money: ${{ money }}</div>
+    
+    <div class="game-area">
+        <div class="hand">
+            <h2>Dealer's Hand</h2>
+            {% if dealer_hand %}
+                {# Show first card #}
+                <div class="card {% if dealer_hand[0][1] in ['♥', '♦'] %}red{% endif %}">
+                    {{ dealer_hand[0][0] }}{{ dealer_hand[0][1] }}
+                </div>
+                
+                {# Show hidden cards if game is not over #}
+                {% if not game_over %}
+                    {% for _ in range(dealer_hand|length - 1) %}
+                        <div class="card hidden">?</div>
+                    {% endfor %}
+                {% else %}
+                    {# Show all cards if game is over #}
+                    {% for card in dealer_hand[1:] %}
+                        <div class="card {% if card[1] in ['♥', '♦'] %}red{% endif %}">
+                            {{ card[0] }}{{ card[1] }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+                
+                {# Show value only when game is over #}
+                {% if game_over %}
+                    <div>Value: {{ calculate_hand_value(dealer_hand) }}</div>
+                {% else %}
+                    <div>Showing: {{ dealer_hand[0][0] }}</div>
+                {% endif %}
+            {% endif %}
+        </div>
+
+        <div class="hand">
+            <h2>Your Hand</h2>
+            {% for card in player_hand %}
+                <div class="card {% if card[1] in ['♥', '♦'] %}red{% endif %}">
+                    {{ card[0] }}{{ card[1] }}
+                </div>
+            {% endfor %}
+            {% if player_hand %}
+                <div>Value: {{ calculate_hand_value(player_hand) }}</div>
+            {% endif %}
+        </div>
+
+        {% if message %}
+            <div class="message">{{ message }}</div>
+        {% endif %}
+
+        <div class="controls">
+            {% if not game_over and player_hand %}
+                <a href="{{ url_for('hit') }}" class="button">Hit</a>
+                <a href="{{ url_for('blackjack_stand') }}" class="button">Stand</a>
+            {% else %}
+                <a href="{{ url_for('new_game') }}" class="button">Play Again</a>
+                <a href="{{ url_for('logout') }}" class="button">Logout</a>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
