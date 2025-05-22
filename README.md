@@ -9,6 +9,7 @@ Flask web application combining facial recognition with a gambling system, featu
 - [x] MySQL database integration
 - [x] Virtual currency with 50 credit starting balance
 - [x] Real-time balance & transaction handling
+- [x] simple Logs
 
 ### Blackjack Implementation
 - [x] Complete game logic with standard casino rules
@@ -60,7 +61,6 @@ users (
 - [ ] Face ID integration
 - [ ] User statistics/achievements
 - [ ] Security improvements
-- [ ] Logs
 
 ## API Routes
 
