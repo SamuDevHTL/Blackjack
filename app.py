@@ -145,19 +145,28 @@ def blackjack():
                          dealer_hand=session.get('dealer_hand', []),
                          game_over=session.get('game_over', False),
                          message=session.get('message', ""),
+                         current_bet=session.get('current_bet', 10),
                          calculate_hand_value=calculate_hand_value)
 
-@app.route("/blackjack/new")
+@app.route("/blackjack/new", methods=["POST"])
 def new_game():
     if 'user_id' not in session:
         return redirect(url_for("login"))
 
     user_id = session['user_id']
     money = get_user_money(user_id)
-    bet_amount = 10  # Fixed bet amount
+    
+    try:
+        bet_amount = int(request.form.get('bet_amount', 10))
+        if bet_amount < 1:
+            session['message'] = "Minimum bet is $1!"
+            return redirect(url_for('blackjack'))
+    except ValueError:
+        session['message'] = "Invalid bet amount!"
+        return redirect(url_for('blackjack'))
 
     if money < bet_amount:
-        session['message'] = "Not enough money to play!"
+        session['message'] = "Not enough money to place that bet!"
         session['game_over'] = True
         session.modified = True
         return redirect(url_for('blackjack'))
@@ -175,6 +184,7 @@ def new_game():
     session['dealer_hand'] = dealer_hand
     session['game_over'] = False
     session['message'] = ''
+    session['current_bet'] = bet_amount  # Store the current bet
     session.modified = True
     
     # Deduct bet amount
@@ -234,7 +244,7 @@ def blackjack_stand():
     
     user_id = session['user_id']
     money = get_user_money(user_id)
-    bet_amount = 10  # Fixed bet amount
+    bet_amount = session.get('current_bet', 10)  # Get the current bet from session
     
     # Get current state
     deck = session['deck']

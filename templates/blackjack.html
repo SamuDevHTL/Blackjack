@@ -94,12 +94,17 @@
         {% endif %}
 
         <div class="controls">
-            {% if not game_over and player_hand %}
+            {% if player_hand and not game_over %}
                 <a href="{{ url_for('hit') }}" class="button">Hit</a>
                 <a href="{{ url_for('blackjack_stand') }}" class="button">Stand</a>
             {% else %}
-                <a href="{{ url_for('new_game') }}" class="button">Deal New Hand</a>
-                <a href="{{ url_for('logout') }}" class="button">Cash Out</a>
+                <form action="{{ url_for('new_game') }}" method="POST" class="bet-form">
+                    <div class="bet-controls">
+                        <input type="number" name="bet_amount" id="bet_amount" value="{{ current_bet }}" min="1" max="{{ money }}" class="bet-input">
+                        <button type="submit" class="button">Deal New Hand</button>
+                    </div>
+                </form>
+                <a href="{{ url_for('logout') }}" class="button">Log Out</a>
             {% endif %}
         </div>
     </div>
