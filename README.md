@@ -18,6 +18,7 @@ Flask web application combining facial recognition with a gambling system, featu
   - Natural blackjack (3:2)
   - Regular win (1:1)
   - Push & bust detection
+- [X] Configurable bets
 
 ### Interface
 - [x] Modern, responsive design
@@ -56,7 +57,6 @@ users (
 
 ### Planned Features
 - [ ] Face ID integration
-- [ ] Configurable bets
 - [ ] User statistics/achievements
 - [ ] Security improvements
 - [ ] Improve looks
