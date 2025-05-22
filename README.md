@@ -60,6 +60,7 @@ users (
 - [ ] User statistics/achievements
 - [ ] Security improvements
 - [ ] Improve looks
+- [ ] Logs
 
 ## API Routes
 
