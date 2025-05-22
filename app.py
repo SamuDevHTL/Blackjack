@@ -6,7 +6,7 @@ import os
 from datetime import datetime
 
 app = Flask(__name__)
-app.secret_key = "change_this_to_a_random_secret"  # Needed for sessions
+app.secret_key = "secret-key"  # Needed for sessions
 
 # Ensure logs directory exists
 os.makedirs('logs', exist_ok=True)
@@ -363,6 +363,63 @@ def logout():
             auth_logger.info(f"Logout: {username}")
     session.clear()
     return redirect(url_for("login"))
+
+@app.route("/leaderboard")
+def leaderboard():
+    if 'user_id' not in session:
+        return redirect(url_for("login"))
+    
+    conn = connect_db()
+    leaderboard_data = []
+    if conn:
+        try:
+            cursor = conn.cursor()
+            # Get top 10 players by money
+            cursor.execute("""
+                SELECT username, money 
+                FROM users 
+                ORDER BY money DESC 
+                LIMIT 10
+            """)
+            leaderboard_data = cursor.fetchall()
+            cursor.close()
+            conn.close()
+        except Error as e:
+            error_logger.error(f"Leaderboard error: {e}")
+    
+    # Get current user's rank
+    user_id = session['user_id']
+    user_rank = None
+    user_money = get_user_money(user_id)
+    username = get_username(user_id)
+    
+    if conn := connect_db():
+        try:
+            cursor = conn.cursor()
+            # Get user's rank
+            cursor.execute("""
+                SELECT rank 
+                FROM (
+                    SELECT id, RANK() OVER (ORDER BY money DESC) as rank 
+                    FROM users
+                ) rankings 
+                WHERE id = %s
+            """, (user_id,))
+            result = cursor.fetchone()
+            if result:
+                user_rank = result[0]
+            cursor.close()
+            conn.close()
+        except Error as e:
+            error_logger.error(f"User rank error: {e}")
+    
+    return render_template(
+        "leaderboard.html",
+        leaderboard=leaderboard_data,
+        user_rank=user_rank,
+        user_money=user_money,
+        username=username
+    )
 
 if __name__ == "__main__":
     app.run(debug=True)

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blackjack Game</title>
+    <title>Blackjack</title>
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='icon.png') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -108,6 +108,7 @@
                         <button type="submit" class="button">Deal New Hand</button>
                     </div>
                 </form>
+                <a href="{{ url_for('leaderboard') }}" class="button">Leaderboard</a>
                 <a href="{{ url_for('logout') }}" class="button">Log Out</a>
             {% endif %}
         </div>

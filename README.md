@@ -59,8 +59,6 @@ users (
 
 ### Planned Features
 - [ ] Face ID integration
-- [ ] User statistics/achievements
-- [ ] Security improvements
 
 ## API Routes
 

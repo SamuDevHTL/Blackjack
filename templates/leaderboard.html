@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaderboard - Blackjack</title>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='icon.png') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/blackjack.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/leaderboard.css') }}">
+</head>
+<body>
+    <h1>Leaderboard</h1>
+    
+    <div class="money">💰 ${{ user_money }}</div>
+    
+    <div class="leaderboard-container">
+        <div class="user-stats">
+            <h2>Your Stats</h2>
+            <p>
+                <strong>{{ username }}</strong><br>
+                Rank: #{{ user_rank if user_rank else 'N/A' }}
+            </p>
+        </div>
+
+        <table class="leaderboard-table">
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Player</th>
+                    <th>Balance</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for player in leaderboard %}
+                <tr {% if player[0] == username %}class="highlighted-row"{% endif %}>
+                    <td class="rank">#{{ loop.index }}</td>
+                    <td>{{ player[0] }}</td>
+                    <td>💰 ${{ player[1] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="nav-buttons">
+            <a href="{{ url_for('blackjack') }}" class="button">Back to Game</a>
+        </div>
+    </div>
+</body>
+</html> 
