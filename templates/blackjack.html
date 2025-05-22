@@ -7,48 +7,59 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            max-width: 800px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
-            background-color: #f0f0f0;
+            background-color: #0a4d1d;
+            color: white;
         }
         .game-area {
-            background-color: #2c7a2c;
-            padding: 20px;
-            border-radius: 10px;
+            background-color: #0b5c23;
+            padding: 30px;
+            border-radius: 15px;
             color: white;
             margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            border: 2px solid #0d7a2d;
         }
         .hand {
             margin: 20px 0;
-            padding: 15px;
+            padding: 20px;
             background-color: rgba(0, 0, 0, 0.2);
-            border-radius: 5px;
+            border-radius: 10px;
+            position: relative;
+        }
+        .cards-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 10px 0;
         }
         .card {
-            display: inline-block;
-            background-color: white;
-            color: black;
-            padding: 10px;
-            margin: 5px;
-            border-radius: 5px;
-            min-width: 30px;
-            text-align: center;
+            width: 120px;
+            height: 167px; /* Maintaining 3:4 ratio */
+            transition: transform 0.2s;
+            position: relative;
         }
-        .card.red {
-            color: red;
+        .card:hover {
+            transform: translateY(-10px);
         }
-        .card.hidden {
-            background-color: #2b5aa7;
-            color: white;
+        .card img {
+            width: 100%;
+            height: 100%;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
         .controls {
             margin-top: 20px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
         }
         .button {
-            background-color: #4CAF50;
+            background-color: #e6b800;
             border: none;
-            color: white;
+            color: #000;
             padding: 15px 32px;
             text-align: center;
             text-decoration: none;
@@ -56,7 +67,16 @@
             font-size: 16px;
             margin: 4px 2px;
             cursor: pointer;
-            border-radius: 4px;
+            border-radius: 25px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .button:hover {
+            background-color: #ffcc00;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
         .button:disabled {
             background-color: #cccccc;
@@ -66,64 +86,122 @@
             font-size: 1.2em;
             font-weight: bold;
             margin: 20px 0;
-            padding: 10px;
+            padding: 15px;
             background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 5px;
+            border-radius: 10px;
+            text-align: center;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
         }
         .money {
-            font-size: 1.5em;
+            font-size: 2em;
             font-weight: bold;
             margin-bottom: 20px;
-            color: #4CAF50;
+            color: #ffd700;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        .hand-value {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            background-color: rgba(0, 0, 0, 0.6);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+        h1 {
+            text-align: center;
+            color: #ffd700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            font-size: 3em;
+            margin-bottom: 30px;
+        }
+        h2 {
+            color: #ffd700;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
         }
     </style>
 </head>
 <body>
     <h1>Blackjack</h1>
     
-    <div class="money">Money: ${{ money }}</div>
+    <div class="money">💰 ${{ money }}</div>
     
     <div class="game-area">
         <div class="hand">
             <h2>Dealer's Hand</h2>
             {% if dealer_hand %}
-                {# Show first card #}
-                <div class="card {% if dealer_hand[0][1] in ['♥', '♦'] %}red{% endif %}">
-                    {{ dealer_hand[0][0] }}{{ dealer_hand[0][1] }}
+                <div class="cards-container">
+                    {# Show first card #}
+                    <div class="card">
+                        <img src="{{ url_for('static', filename='cards/' + {
+                            'A': 'ace',
+                            'K': 'king',
+                            'Q': 'queen',
+                            'J': 'jack'
+                        }.get(dealer_hand[0][0], dealer_hand[0][0].lower()) + '_of_' + {
+                            '♠': 'spades',
+                            '♣': 'clubs',
+                            '♥': 'hearts',
+                            '♦': 'diamonds'
+                        }[dealer_hand[0][1]] + '.png') }}" alt="{{ dealer_hand[0][0] }}{{ dealer_hand[0][1] }}">
+                    </div>
+                    
+                    {# Show hidden cards if game is not over #}
+                    {% if not game_over %}
+                        {% for _ in range(dealer_hand|length - 1) %}
+                            <div class="card">
+                                <img src="{{ url_for('static', filename='cards/card_back.png') }}" alt="Hidden card">
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        {# Show all cards if game is over #}
+                        {% for card in dealer_hand[1:] %}
+                            <div class="card">
+                                <img src="{{ url_for('static', filename='cards/' + {
+                                    'A': 'ace',
+                                    'K': 'king',
+                                    'Q': 'queen',
+                                    'J': 'jack'
+                                }.get(card[0], card[0].lower()) + '_of_' + {
+                                    '♠': 'spades',
+                                    '♣': 'clubs',
+                                    '♥': 'hearts',
+                                    '♦': 'diamonds'
+                                }[card[1]] + '.png') }}" alt="{{ card[0] }}{{ card[1] }}">
+                            </div>
+                        {% endfor %}
+                    {% endif %}
                 </div>
-                
-                {# Show hidden cards if game is not over #}
-                {% if not game_over %}
-                    {% for _ in range(dealer_hand|length - 1) %}
-                        <div class="card hidden">?</div>
-                    {% endfor %}
-                {% else %}
-                    {# Show all cards if game is over #}
-                    {% for card in dealer_hand[1:] %}
-                        <div class="card {% if card[1] in ['♥', '♦'] %}red{% endif %}">
-                            {{ card[0] }}{{ card[1] }}
-                        </div>
-                    {% endfor %}
-                {% endif %}
                 
                 {# Show value only when game is over #}
                 {% if game_over %}
-                    <div>Value: {{ calculate_hand_value(dealer_hand) }}</div>
-                {% else %}
-                    <div>Showing: {{ dealer_hand[0][0] }}</div>
+                    <div class="hand-value">Value: {{ calculate_hand_value(dealer_hand) }}</div>
                 {% endif %}
             {% endif %}
         </div>
 
         <div class="hand">
             <h2>Your Hand</h2>
-            {% for card in player_hand %}
-                <div class="card {% if card[1] in ['♥', '♦'] %}red{% endif %}">
-                    {{ card[0] }}{{ card[1] }}
-                </div>
-            {% endfor %}
+            <div class="cards-container">
+                {% for card in player_hand %}
+                    <div class="card">
+                        <img src="{{ url_for('static', filename='cards/' + {
+                            'A': 'ace',
+                            'K': 'king',
+                            'Q': 'queen',
+                            'J': 'jack'
+                        }.get(card[0], card[0].lower()) + '_of_' + {
+                            '♠': 'spades',
+                            '♣': 'clubs',
+                            '♥': 'hearts',
+                            '♦': 'diamonds'
+                        }[card[1]] + '.png') }}" alt="{{ card[0] }}{{ card[1] }}">
+                    </div>
+                {% endfor %}
+            </div>
             {% if player_hand %}
-                <div>Value: {{ calculate_hand_value(player_hand) }}</div>
+                <div class="hand-value">Value: {{ calculate_hand_value(player_hand) }}</div>
             {% endif %}
         </div>
 
@@ -136,8 +214,8 @@
                 <a href="{{ url_for('hit') }}" class="button">Hit</a>
                 <a href="{{ url_for('blackjack_stand') }}" class="button">Stand</a>
             {% else %}
-                <a href="{{ url_for('new_game') }}" class="button">Play Again</a>
-                <a href="{{ url_for('logout') }}" class="button">Logout</a>
+                <a href="{{ url_for('new_game') }}" class="button">Deal New Hand</a>
+                <a href="{{ url_for('logout') }}" class="button">Cash Out</a>
             {% endif %}
         </div>
     </div>
