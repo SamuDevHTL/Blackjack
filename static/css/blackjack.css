@@ -5,6 +5,11 @@
     font-family: 'Poppins', sans-serif;
 }
 
+/* Add white background to favicon */
+link[rel="icon"] {
+    background-color: white;
+}
+
 html, body {
     height: 100vh;
     overflow: hidden;
@@ -32,9 +37,8 @@ h1 {
     font-size: 2.2em;
     font-weight: bold;
     margin: 10px 0;
-    background: linear-gradient(45deg, #ffd700, #ff6ec4);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: #4b4b4b;  /* A light pastel green */
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);  /* Adds a subtle glow effect */
     text-align: center;
 }
 

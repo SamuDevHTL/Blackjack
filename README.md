@@ -25,6 +25,7 @@ Flask web application combining facial recognition with a gambling system, featu
 - [x] Hidden dealer cards
 - [x] Game controls (Hit/Stand/New Game)
 - [x] Balance & message display
+- [x] Improve looks
 
 ## 🛠️ Structure
 
@@ -59,7 +60,6 @@ users (
 - [ ] Face ID integration
 - [ ] User statistics/achievements
 - [ ] Security improvements
-- [ ] Improve looks
 - [ ] Logs
 
 ## API Routes
