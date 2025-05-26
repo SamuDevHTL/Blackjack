@@ -27,7 +27,7 @@ Flask web application combining facial recognition with a gambling system, featu
 - [x] Game controls (Hit/Stand/New Game)
 - [x] Balance & message display
 - [x] Improve looks
-
+- [x] mobile responsive
 ## 🛠️ Structure
 
 ### Database

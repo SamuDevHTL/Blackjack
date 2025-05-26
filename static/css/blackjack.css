@@ -10,17 +10,21 @@ link[rel="icon"] {
     background-color: white;
 }
 
-html, body {
-    height: 100vh;
-    overflow: hidden;
+html {
+    height: 100%;
+    -webkit-overflow-scrolling: touch;
 }
 
 body {
+    min-height: 100%;
     background: #f9f9f9 url('https://www.transparenttextures.com/patterns/cartographer.png');
     color: #111;
     padding: 20px;
     display: flex;
     flex-direction: column;
+    position: relative;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 h1 {
@@ -50,11 +54,10 @@ h1 {
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
     max-width: 1600px;
     margin: 0 auto;
-    flex: 1;
-    display: grid;
-    grid-template-rows: 1fr 1fr auto;
-    gap: 15px;
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
 }
 
 .hand {
@@ -220,20 +223,44 @@ h2 {
 }
 
 @media screen and (max-width: 768px) {
+    html, body {
+        position: relative;
+        overflow-y: auto;
+        height: auto;
+    }
+
     body {
         padding: 10px;
+        min-height: 100%;
     }
 
     h1 {
         font-size: 2em;
     }
 
+    .money {
+        font-size: 1.8em;
+        margin: 5px 0;
+    }
+
     .game-area {
         padding: 15px;
+        gap: 10px;
+        margin-bottom: 20px;
+        height: auto;
     }
 
     .hand {
         padding: 15px;
+        height: auto;
+    }
+
+    .hand-value {
+        position: relative;
+        right: auto;
+        top: auto;
+        margin-top: 10px;
+        display: inline-block;
     }
 
     .cards-container {
@@ -248,18 +275,27 @@ h2 {
 
     .controls {
         flex-direction: column;
-        align-items: center;
+        align-items: stretch;
         gap: 10px;
-    }
-
-    .bet-form {
-        flex-direction: column;
+        padding-bottom: 20px;
     }
 
     .button {
         width: 100%;
-        max-width: 250px;
         min-width: unset;
-        padding: 10px 20px;
+        padding: 12px 20px;
+    }
+
+    .bet-form {
+        width: 100%;
+    }
+
+    .bet-controls {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .bet-input {
+        width: 100%;
     }
 } 
