@@ -1,84 +1,128 @@
 # FaceId-gambling
 
-Flask web application combining facial recognition with a gambling system, featuring a Blackjack game.
+![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
+![Flask](https://img.shields.io/badge/flask-%23000.svg?style=for-the-badge&logo=flask&logoColor=white)
+![MySQL](https://img.shields.io/badge/mysql-4479A1.svg?style=for-the-badge&logo=mysql&logoColor=white)
+![Linux](https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black)
+![Windows](https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white)
+![macOS](https://img.shields.io/badge/mac%20os-000000?style=for-the-badge&logo=macos&logoColor=F0F0F0)
+![iOS](https://img.shields.io/badge/iOS-000000?style=for-the-badge&logo=ios&logoColor=white)![Android](https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white)
 
-## ✅ Current Features
+> A secure Flask web application that combines facial recognition with an engaging gambling system, featuring a Blackjack game implementation.
 
-### Core Systems
-- [x] User authentication (register/login/logout)
-- [x] MySQL database integration
-- [x] Virtual currency with 50 credit starting balance
-- [x] Real-time balance & transaction handling
-- [x] simple Logs
+## 📋 Table of Contents
+- [Features](#features)
+- [Technologies Used](#technologies-used)
+- [Project Structure](#project-structure)
+- [Getting Started](#getting-started)
+- [API Documentation](#api-documentation)
+- [Security Considerations](#security-considerations)
+- [Roadmap](#roadmap)
 
-### Blackjack Implementation
-- [x] Complete game logic with standard casino rules
-- [x] Card scoring (Face=10, Ace=1/11, Numbers=face value)
-- [x] Dealer AI (hits on 16-, stands on 17+)
-- [x] Win conditions
-  - Natural blackjack (3:2)
-  - Regular win (1:1)
-  - Push & bust detection
-- [X] Configurable bets
+## ✨ Features
 
-### Interface
-- [x] Modern, responsive design
-- [x] Hidden dealer cards
-- [x] Game controls (Hit/Stand/New Game)
-- [x] Balance & message display
-- [x] Improve looks
-- [x] mobile responsive
-## 🛠️ Structure
+### 🔐 Authentication & Security
+- User authentication system (register/login/logout)
+- Session management
+- MySQL database integration
+- Virtual currency system with initial 50 credit balance
+- Transaction logging and monitoring
 
-### Database
+### 🎰 Blackjack Game
+- Complete game logic following standard casino rules
+- Intelligent dealer AI (hits on 16-, stands on 17+)
+- Card scoring system:
+  - Face cards = 10
+  - Ace = 1 or 11 (dynamic)
+  - Number cards = face value
+- Multiple win conditions:
+  - Natural blackjack (3:2 payout)
+  - Regular win (1:1 payout)
+  - Push and bust detection
+- Configurable betting system
+
+### 🎨 User Interface
+- Modern, responsive design
+- Mobile-friendly layout
+- Real-time balance updates
+- Interactive game controls
+- Strategic dealer card visibility
+- Intuitive game messaging system
+
+## 🛠️ Technologies Used
+- Python 3.6+
+- Flask web framework
+- MySQL database
+- HTML5/CSS3
+- JavaScript
+- Docker (coming soon)
+
+## 🏗️ Project Structure
+
+### Database Schema
 ```sql
-users (
-    id: INT PRIMARY KEY
-    username: VARCHAR(255)
-    password: VARCHAR(255)
-    money: DECIMAL(10,2)
-)
+CREATE TABLE users (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    username VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    money DECIMAL(10,2) DEFAULT 50.00
+);
 ```
 
-### Routes
+### API Endpoints
+
+#### Authentication Routes
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/` | Login page |
+| POST | `/` | Process login |
+| GET | `/register` | Registration page |
+| POST | `/register` | Process registration |
+| GET | `/logout` | Logout user |
+
+#### Game Routes
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/blackjack` | Main game view |
+| GET | `/blackjack/new` | Start new game |
+| GET | `/blackjack/hit` | Hit action |
+| GET | `/blackjack/stand` | Stand action |
+
+## 🚀 Getting Started
+
+1. Clone the repository
+```bash
+git clone https://github.com/your-username/FaceId-gambling.git
+cd FaceId-gambling
 ```
-/                    → Login
-/register            → Registration
-/blackjack          → Game view
-/blackjack/new      → New game
-/blackjack/hit      → Hit action
-/blackjack/stand    → Stand action
+
+2. Install dependencies
+```bash
+pip install -r requirements.txt
 ```
 
-## 🚧 Limitations & TODO
+3. Set up environment variables
+```bash
+cp .env.example .env
+# Edit .env with your database credentials
+```
 
-### Current Limitations
-- Basic security (no password hashing, simple sessions)
-- Fixed bet amount (10 credits)
-- No advanced game features (split, double down)
+4. Run the application
+```bash
+python app.py
+```
 
-### Planned Features
+## 🔒 Security Considerations
+
+> ⚠️ **Note**: This is currently a development version. For production deployment, implement:
+
+- Password hashing
+- Enhanced session management
+- Rate limiting
+- SQL injection protection
+- CSRF protection
+- HTTPS enforcement
+
+## 🗺️ Roadmap
+
 - [ ] Face ID integration
-
-## API Routes
-
-### Authentication
-- `GET /` - Login page
-- `POST /` - Process login
-- `GET /register` - Registration page
-- `POST /register` - Process registration
-- `GET /logout` - Logout user
-
-### Game
-- `GET /blackjack` - Main game view
-- `GET /blackjack/new` - Start new game
-- `GET /blackjack/hit` - Hit action
-- `GET /blackjack/stand` - Stand action
-
-## Security Notes
-
-Current limitations:
-   - Plain text password storage (not recommended for production)
-   - Basic session management
-   - No rate limiting
-

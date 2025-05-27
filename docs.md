@@ -1,5 +1,25 @@
 # FaceId-gambling Documentation
 
+![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
+![Flask](https://img.shields.io/badge/flask-%23000.svg?style=for-the-badge&logo=flask&logoColor=white)
+![MySQL](https://img.shields.io/badge/mysql-4479A1.svg?style=for-the-badge&logo=mysql&logoColor=white)
+![Linux](https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black)
+![Windows](https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white)
+![macOS](https://img.shields.io/badge/mac%20os-000000?style=for-the-badge&logo=macos&logoColor=F0F0F0)
+![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white)
+
+## 📋 Table of Contents
+- [Overview](#-overview)
+- [Architecture](#-architecture)
+- [Database Schema](#-database-schema)
+- [Authentication System](#-authentication-system)
+- [Game System](#-game-system)
+- [Leaderboard System](#-leaderboard-system)
+- [Logging System](#-logging-system)
+- [UI/UX Design](#-uiux-design)
+- [Getting Started](#-getting-started)
+
 ## 📖 Overview
 A modern web-based Blackjack game with user authentication, virtual currency system, and a global leaderboard. Built with Flask and MySQL, featuring a sleek, responsive UI with smooth animations and gradients.
 
@@ -140,9 +160,10 @@ CREATE TABLE users (
 
 ### Step-by-Step Setup Guide
 
-#### 1. System Setup
+<details>
+<summary>1. System Setup</summary>
 
-##### For Ubuntu/Debian:
+#### For Ubuntu/Debian:
 ```bash
 # Update package list
 sudo apt update
@@ -158,12 +179,15 @@ sudo systemctl start mysql
 sudo systemctl enable mysql
 ```
 
-##### For Windows:
+#### For Windows:
 1. Download and install Python from [python.org](https://www.python.org/downloads/)
 2. Download and install MySQL from [mysql.com](https://dev.mysql.com/downloads/installer/)
 3. Add Python and pip to your PATH environment variable
+</details>
 
-#### 2. Database Setup
+<details>
+<summary>2. Database Setup</summary>
+
 ```bash
 # Login to MySQL (Windows: use MySQL Command Line Client)
 sudo mysql -u root -p
@@ -185,8 +209,11 @@ mysql> CREATE TABLE users (
 
 mysql> exit;
 ```
+</details>
 
-#### 3. Project Setup
+<details>
+<summary>3. Project Setup</summary>
+
 ```bash
 # Clone the repository
 git clone https://github.com/yourusername/FaceId-gambling.git
@@ -204,8 +231,10 @@ venv\Scripts\activate
 # Install required packages
 pip install -r requirements.txt
 ```
+</details>
 
-#### 4. Configuration
+<details>
+<summary>4. Configuration</summary>
 
 1. Create a `requirements.txt` file if it doesn't exist:
 ```bash
@@ -230,8 +259,10 @@ SECRET_KEY=your-secret-key-here" > .env
 # Create directories for logs and static files
 mkdir -p logs static/cards static/css
 ```
+</details>
 
-#### 5. Running the Application
+<details>
+<summary>5. Running the Application</summary>
 
 1. First run setup:
 ```bash
@@ -243,6 +274,7 @@ flask run --debug
 - Open your browser and navigate to `http://localhost:5000`
 - Register a new account
 - Start playing!
+</details>
 
 ### Directory Structure
 ```
@@ -250,64 +282,13 @@ FaceId-gambling/
 ├── app.py              # Main application file
 ├── requirements.txt    # Python dependencies
 ├── .env               # Environment variables
-├── docs.md            # Documentation
-├── logs/              # Log files
-│   ├── auth.log
-│   ├── game.log
-│   └── errors.log
-├── static/            # Static files
+├── static/            # Static assets
 │   ├── css/          # Stylesheets
-│   │   ├── auth.css
-│   │   ├── blackjack.css
-│   │   └── leaderboard.css
-│   ├── cards/        # Card images
-│   └── icon.png      # Favicon
-└── templates/         # HTML templates
-    ├── login.html
-    ├── register.html
-    ├── blackjack.html
-    └── leaderboard.html
-```
-
-### Troubleshooting
-
-#### Common Issues and Solutions
-
-1. **MySQL Connection Error**
-```
-Error: Database connection error
-```
-Solutions:
-- Check if MySQL service is running
-- Verify database credentials in `.env`
-- Ensure MySQL user has correct privileges
-
-2. **Missing Dependencies**
-```
-ModuleNotFoundError: No module named 'flask'
-```
-Solution:
-```bash
-pip install -r requirements.txt
-```
-
-3. **Port Already in Use**
-```
-OSError: [Errno 98] Address already in use
-```
-Solution:
-```bash
-# Find and kill the process using port 5000
-sudo lsof -i :5000
-kill -9 <PID>
-```
-
-4. **Logs Directory Permission**
-```
-PermissionError: [Errno 13] Permission denied: 'logs/auth.log'
-```
-Solution:
-```bash
-chmod 755 logs
-chmod 644 logs/*.log
+│   └── cards/        # Card images
+├── templates/         # HTML templates
+├── logs/             # Application logs
+│   ├── auth.log      # Authentication logs
+│   ├── game.log      # Game logs
+│   └── errors.log    # Error logs
+└── venv/             # Virtual environment
 ```
