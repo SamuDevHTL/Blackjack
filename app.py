@@ -160,7 +160,7 @@ def register():
                 try:
                     cursor.execute(
                         "INSERT INTO users (username, password, money) VALUES (%s, %s, %s)",
-                        (username, password, 50)
+                        (username, password, 100)
                     )
                     conn.commit()
                     cursor.close()
@@ -398,12 +398,13 @@ def leaderboard():
             cursor = conn.cursor()
             # Get user's rank
             cursor.execute("""
-                SELECT rank 
-                FROM (
-                    SELECT id, RANK() OVER (ORDER BY money DESC) as rank 
-                    FROM users
-                ) rankings 
-                WHERE id = %s
+                SELECT COUNT(*) + 1 
+                FROM users 
+                WHERE money > (
+                    SELECT money 
+                    FROM users 
+                    WHERE id = %s
+                )
             """, (user_id,))
             result = cursor.fetchone()
             if result:
