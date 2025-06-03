@@ -8,24 +8,20 @@ from datetime import datetime
 app = Flask(__name__)
 app.secret_key = "secret-key"  # Needed for sessions
 
-# Ensure logs directory exists
 os.makedirs('logs', exist_ok=True)
 
-# Set up auth logger
 auth_logger = logging.getLogger('auth')
 auth_logger.setLevel(logging.INFO)
 auth_handler = logging.FileHandler(os.path.join('logs', 'auth.log'))
 auth_handler.setFormatter(logging.Formatter('%(asctime)s - %(message)s'))
 auth_logger.addHandler(auth_handler)
 
-# Set up game logger
 game_logger = logging.getLogger('game')
 game_logger.setLevel(logging.INFO)
 game_handler = logging.FileHandler(os.path.join('logs', 'game.log'))
 game_handler.setFormatter(logging.Formatter('%(asctime)s - %(message)s'))
 game_logger.addHandler(game_handler)
 
-# Set up error logger
 error_logger = logging.getLogger('error')
 error_logger.setLevel(logging.ERROR)
 error_handler = logging.FileHandler(os.path.join('logs', 'errors.log'))
@@ -58,7 +54,6 @@ def get_user_money(user_id):
         conn.close()
     return money
 
-# Helper: update user money in DB
 def update_user_money(user_id, new_money):
     conn = connect_db()
     if conn:
@@ -71,7 +66,6 @@ def update_user_money(user_id, new_money):
         except Error as e:
             error_logger.error(f"Failed to update money for user {user_id}: {e}")
 
-# Helper: get username by user_id
 def get_username(user_id):
     conn = connect_db()
     username = None
@@ -85,7 +79,6 @@ def get_username(user_id):
         conn.close()
     return username
 
-# Card deck setup
 SUITS = ['♠', '♣', '♥', '♦']
 RANKS = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K']
 
@@ -125,7 +118,7 @@ def login():
 
         conn = connect_db()
         if conn:
-            cursor = conn.cursor()
+            cursor = conn.cursor()                      #fix sql-injection
             query = "SELECT id FROM users WHERE username = %s AND password = %s"
             cursor.execute(query, (username, password))
             user = cursor.fetchone()
@@ -222,14 +215,11 @@ def new_game():
             error_logger.error(f"Insufficient funds - User: {username}, Attempted bet: ${bet_amount}, Balance: ${money}")
         return redirect(url_for('blackjack'))
 
-    # Initialize a new game
     deck = create_deck()
     
-    # Deal initial cards
     player_hand = [deck.pop() for _ in range(2)]
     dealer_hand = [deck.pop() for _ in range(2)]
     
-    # Store everything in session
     session['deck'] = deck
     session['player_hand'] = player_hand
     session['dealer_hand'] = dealer_hand
@@ -238,14 +228,12 @@ def new_game():
     session['current_bet'] = bet_amount
     session.modified = True
     
-    # Deduct bet amount
     money -= bet_amount
     update_user_money(user_id, money)
     
     if username:
         game_logger.info(f"New game: {username} - Bet: ${bet_amount} - Balance: ${money}")
     
-    # Check for natural blackjack
     if calculate_hand_value(player_hand) == 21:
         session['message'] = 'Blackjack! You win!'
         session['game_over'] = True
@@ -270,19 +258,15 @@ def hit():
     username = get_username(user_id)
     bet_amount = session.get('current_bet', 10)
     
-    # Get current state
     deck = session['deck']
     player_hand = session['player_hand']
     
-    # Deal one card to player
     player_hand.append(deck.pop())
     
-    # Update session
     session['deck'] = deck
     session['player_hand'] = player_hand
     session.modified = True
     
-    # Check hand value
     player_value = calculate_hand_value(player_hand)
     if player_value > 21:
         session['message'] = 'Bust! You lose!'
@@ -312,24 +296,19 @@ def blackjack_stand():
     username = get_username(user_id)
     bet_amount = session.get('current_bet', 10)
     
-    # Get current state
     deck = session['deck']
     dealer_hand = session['dealer_hand']
     
-    # Dealer's turn
     while calculate_hand_value(dealer_hand) < 17:
         dealer_hand.append(deck.pop())
     
-    # Update session
     session['deck'] = deck
     session['dealer_hand'] = dealer_hand
     session.modified = True
     
-    # Calculate final values
     player_value = calculate_hand_value(session['player_hand'])
     dealer_value = calculate_hand_value(dealer_hand)
     
-    # Determine winner
     if dealer_value > 21:
         session['message'] = 'Dealer busts! You win!'
         money += bet_amount * 2
@@ -396,7 +375,6 @@ def leaderboard():
     if conn := connect_db():
         try:
             cursor = conn.cursor()
-            # Get user's rank
             cursor.execute("""
                 SELECT COUNT(*) + 1 
                 FROM users 

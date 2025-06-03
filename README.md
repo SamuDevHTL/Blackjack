@@ -1,4 +1,4 @@
-# FaceId-gambling
+# Blackjack
 
 ![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
 ![Flask](https://img.shields.io/badge/flask-%23000.svg?style=for-the-badge&logo=flask&logoColor=white)
@@ -8,7 +8,7 @@
 ![macOS](https://img.shields.io/badge/mac%20os-000000?style=for-the-badge&logo=macos&logoColor=F0F0F0)
 ![iOS](https://img.shields.io/badge/iOS-000000?style=for-the-badge&logo=ios&logoColor=white)![Android](https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white)
 
-> A secure Flask web application that combines facial recognition with an engaging gambling system, featuring a Blackjack game implementation.
+> A simple Blackjack game with a leaderboard
 
 ## 📋 Table of Contents
 - [Features](#features)
@@ -54,8 +54,6 @@
 - Flask web framework
 - MySQL database
 - HTML5/CSS3
-- JavaScript
-- Docker (coming soon)
 
 ## 🏗️ Project Structure
 
@@ -122,7 +120,3 @@ python app.py
 - SQL injection protection
 - CSRF protection
 - HTTPS enforcement
-
-## 🗺️ Roadmap
-
-- [ ] Face ID integration
