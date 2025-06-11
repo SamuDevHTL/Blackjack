@@ -4,6 +4,7 @@ import random
 import logging
 import os
 from datetime import datetime
+from decimal import Decimal
 
 app = Flask(__name__)
 app.secret_key = "secret-key"  # Needed for sessions
@@ -237,7 +238,7 @@ def new_game():
     if calculate_hand_value(player_hand) == 21:
         session['message'] = 'Blackjack! You win!'
         session['game_over'] = True
-        winnings = bet_amount * 2.5
+        winnings = Decimal(bet_amount * 2.5)
         money += winnings
         update_user_money(user_id, money)
         session.modified = True
